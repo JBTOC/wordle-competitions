@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skins Competition Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #3498db;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .round-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .round-header {
+            background-color: #3498db;
+            color: white;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .round-header h2 {
+            margin: 0 0 10px 0;
+        }
+        .round-info {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #34495e;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f0f0f0;
+        }
+        .skins-count {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 18px;
+        }
+        .winner {
+            background-color: #d4edda !important;
+        }
+        .date-cell {
+            font-weight: bold;
+            background-color: #ecf0f1;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e8f4f8;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
+        .team-dub {
+            background-color: #e3f2fd;
+        }
+        .team-mucker {
+            background-color: #fff3e0;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link">← Back to Competitions</a>
+    
+    <h1>🏆 Skins Competition Results</h1>
+    
+    <div class="summary">
+        <strong>How Skins Work:</strong> Each hole is worth points. If one player alone gets the lowest score, 
+        they win the "skin" and collect all accumulated points. If there's a tie for lowest, 
+        the points carry over to the next hole. Missing scores default to 8.
+    </div>
+    
+    {% for round in rounds %}
+    <div class="round-section">
+        <div class="round-header">
+            <h2>Round {{ round.round_num }}</h2>
+            <div class="round-info">
+                <strong>Start Date:</strong> {{ round.start_date }} | 
+                <strong>End Date:</strong> {{ round.end_date }} | 
+                <strong>Holes:</strong> {{ round.total_holes }}
+            </div>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    {% for player in players %}
+                    <th>{{ player }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                <tr {% if round.skins.values()|max > 0 %}class="winner"{% endif %}>
+                    <td class="date-cell">{{ round.start_date }}</td>
+                    <td class="date-cell">{{ round.end_date }}</td>
+                    {% for player in players %}
+                    <td>
+                        <span class="skins-count">{{ round.skins[player] }}</span>
+                    </td>
+                    {% endfor %}
+                </tr>
+            </tbody>
+        </table>
+        
+        {% set max_skins = round.skins.values()|max %}
+        {% if max_skins > 0 %}
+        <div style="margin-top: 15px; padding: 10px; background-color: #d4edda; border-radius: 4px;">
+            <strong>Round Winner(s):</strong>
+            {% for player in players %}
+                {% if round.skins[player] == max_skins %}
+                    {{ player }} ({{ max_skins }} skins){% if not loop.last %}, {% endif %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+    
+    {% if not rounds %}
+    <div class="round-section">
+        <p style="text-align: center; color: #666;">No rounds found in the data.</p>
+    </div>
+    {% endif %}
+</body>
+</html>

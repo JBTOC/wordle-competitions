@@ -1,0 +1,52 @@
+# Wordle Competition Configuration File
+# This file contains all the settings for managing Wordle competitions
+
+# Data Source Configuration
+data_source:
+  # Path to the CSV file containing daily Wordle scores
+  # Relative to the project root directory
+  csv_file_path: "sourceData/Wordler Skins Sandbox - Scores.csv"
+
+# Player and Team Configuration
+players:
+  # Each player has a name and is assigned to a team
+  # Team names are from the first row of the CSV file
+  # Player names are from the second row of the CSV file
+  
+  - name: "Lorcan"
+    team: "Dub"
+  
+  - name: "Keith"
+    team: "Dub"
+  
+  - name: "Gerry"
+    team: "Dub"
+  
+  - name: "Johnny"
+    team: "Dub"
+  
+  - name: "Paul"
+    team: "Mucker"
+  
+  - name: "Raffe"
+    team: "Mucker"
+  
+  - name: "JOCO"
+    team: "Mucker"
+  
+  - name: "Giller"
+    team: "Mucker"
+
+# Competition Settings (optional - for future use)
+competition:
+  # Scoring rules can be added here
+  max_attempts: 6
+  points_for_win: 10
+  
+# Notes:
+# - The CSV file has team names in the first row for each player column
+# - Player names are in the second row
+# - Daily scores start from the third row onwards
+# - Date and Hole columns are in the first two columns
+
+# Made with Bob
