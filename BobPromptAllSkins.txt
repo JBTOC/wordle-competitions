@@ -1,0 +1,40 @@
+Bob Wordler Prompt Latest
+
+A group of people want to have some competitions based on their daily wordle scores.
+Everyone's wordle score will be entered in a csv file stored in an existing subdirectory called sourceData.
+Make the spreadsheet and its path into a configurable variable.
+Each of the players' names will also be a configuration item.
+Each player will be on a team for the competitions that are team based. So as well as name each player will have a team attribute that is configurable.
+Some competitions will be individually based - not all will be team based.
+The first Row of the spreadsheet will hold the team name for for the player who's name is in the row directly below
+All these configurations should be in a config file that the administrator can easily manage. The config file should be in python.
+Using the existing csv file stored in sourceData Can you create this configuration file please.
+
+You must not make any data up. It exists already. If you are confused please stop and ask me what you are unsure about.
+
+Row 3 onwards in the spreadsheet are the daily scores for each player.
+
+Lets call each row of scores a hole.
+Each hole will have: a date; a number and the score for each player ion that hole.
+A set of contiguous holes will be associated together as a Round.
+There will usually be 18 holes in each round. Here is how you identify the holes that make up a round:
+
+If the hole is 1 then that means this is the first hole of a new round. And therefore the previous round must have ended on the previous hole.
+
+The spreadsheet may contain multiple rounds, one after the other.
+
+For now There will be 8 players spread across two teams of four usually. But this can change.
+
+Using the spreadsheet stored in sourceData I want you to tell me the start date and end date for all the rounds it contains. Remember that a round ends the row before hole 1 of the next round.
+
+Associated to each round will be a set of competitions.
+
+Competition 1 is called Skins. As in the golf competition called skins. Each day is the equivalent of a golf hole.  Every player starts off with zero skins. If one person alone gets the lowest score on a hole then they win the "skin". This allows them to collect all the points that have accrued since the previous skin was won. If there is no outright lowest score then no one wins the skin for that hole and the point accrues until the next skin is won. When a skin is won then the there are no extra points to accrue so the next hole (if there is one in left in this round) the skin is just worth 1 point again.
+If no entry is made for a player on a given hole then their score will default to 8.
+
+Can you write a web app using python that will go through the spreadsheet to calculate the skins won for each player per round.
+
+On the web page for the skins competition show a table for each round.
+Each row in the table will have a start date, an end date, the number of skins per player.
+Have a header row showing the names of the players. 
+Don't forget to convert the human readable date (that I use for my convenience) into a date object of your choice so that you can calculate date ranges properly.
