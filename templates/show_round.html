@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Round {{ round_config.round_date }} - Wordle Competitions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f1e8;
+        }
+        h1 {
+            color: #3d3d3d;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #6b8e7f;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .round-header {
+            background: #e8e4d9;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(61, 61, 61, 0.08);
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 16px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .status-active {
+            background-color: #7fa68f;
+            color: white;
+        }
+        .status-completed {
+            background-color: #bfbab0;
+            color: white;
+        }
+        .round-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .info-item {
+            padding: 15px;
+            background: #f4f1e8;
+            border-radius: 4px;
+        }
+        .info-label {
+            font-size: 0.85em;
+            color: #5a5a5a;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #3d3d3d;
+        }
+        .section {
+            background: #e8e4d9;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(61, 61, 61, 0.08);
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #3d3d3d;
+            border-bottom: 2px solid #6b8e7f;
+            padding-bottom: 10px;
+        }
+        .competitors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .competitor-card {
+            padding: 15px;
+            background: #f4f1e8;
+            border-radius: 4px;
+            border-left: 4px solid #6b8e7f;
+        }
+        .competitor-name {
+            font-weight: bold;
+            color: #3d3d3d;
+            margin-bottom: 5px;
+        }
+        .competitor-team {
+            font-size: 0.9em;
+            color: #5a5a5a;
+        }
+        .competitions-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .competition-card {
+            flex: 1;
+            min-width: 200px;
+            padding: 20px;
+            background: linear-gradient(135deg, #6b8e7f 0%, #5a7a6d 100%);
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .competition-card:hover {
+            transform: translateY(-3px);
+        }
+        .competition-card h3 {
+            margin: 0 0 10px 0;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+        .btn-primary {
+            background-color: #6b8e7f;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #5a7a6d;
+        }
+        .btn-secondary {
+            background-color: #bfbab0;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #a8a39a;
+        }
+        .btn-danger {
+            background-color: #b87c7c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #a56b6b;
+        }
+        .actions {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #d4d0c5;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .alert-success {
+            background-color: #d9e8d9;
+            color: #3d5a3d;
+            border: 1px solid #c5d9c5;
+        }
+        .alert-error {
+            background-color: #e8d4d4;
+            color: #6b3d3d;
+            border: 1px solid #d4c0c0;
+        }
+    </style>
+</head>
+<body>
+    <a href="/rounds" class="back-link">← Back to All Rounds</a>
+    
+    <h1>📊 Round Details</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="round-header">
+        <span class="status-badge status-{{ round_config.status }}">
+            {{ round_config.status|upper }}
+        </span>
+        <h2>{{ round_config.round_date_formatted }}</h2>
+        
+        <div class="round-info">
+            <div class="info-item">
+                <div class="info-label">Round ID</div>
+                <div class="info-value">{{ round_config.round_date }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Start Date</div>
+                <div class="info-value">{{ round_config.start_date[:10] }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Competitors</div>
+                <div class="info-value">{{ round_config.competitors|length }}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Teams</div>
+                <div class="info-value">{{ round_config.teams|length }}</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Competitors Section -->
+    <div class="section">
+        <h2>👥 Competitors</h2>
+        <div class="competitors-grid">
+            {% for competitor in round_config.competitors %}
+            <div class="competitor-card">
+                <div class="competitor-name">{{ competitor.name }}</div>
+                <div class="competitor-team">Team: {{ competitor.team }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Competitions Section -->
+    <div class="section">
+        <h2>🏆 Competitions</h2>
+        <div class="competitions-list">
+            {% for comp in round_config.competitions %}
+            <div class="competition-card" onclick="window.location.href='/{{ comp }}'">
+                <h3>{{ comp|title }}</h3>
+                <p>View Results →</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Actions Section -->
+    <div class="section">
+        <h2>⚙️ Actions</h2>
+        <div class="actions">
+            <a href="/round/{{ round_config.round_date }}/edit" class="btn btn-primary">
+                Edit Round Configuration
+            </a>
+            
+            {% if round_config.status == 'active' %}
+            <form method="POST" action="/round/{{ round_config.round_date }}/close" 
+                  style="display: inline;" 
+                  onsubmit="return confirm('Are you sure you want to close this round?');">
+                <button type="submit" class="btn btn-danger">Close Round</button>
+            </form>
+            {% endif %}
+            
+            <a href="/rounds" class="btn btn-secondary">Back to All Rounds</a>
+        </div>
+    </div>
+</body>
+</html>

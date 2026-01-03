@@ -1,0 +1,24 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww15420\viewh12820\viewkind0
+\deftab560
+\pard\pardeftab560\slleading20\partightenfactor0
+
+\f0\fs26 \cf0 I have an input file that contains patterns in unstructured data that I want you turn into a csv file for me please. The csv file will be a record of scores by players that can be found in the input file.\
+The input file is /Users/joc/Education/WordleWithBob/sourceData/whatappWordleDump.txt\
+The csv file should be stored in '/Users/joc/Education/WordleWithBob/sourceData/Wordler Skins Parse Inputs - Scores.csv'\
+The first Row of the csv will hold the team name for for the player who\'92s name is in the row directly below. I\'92ll give you instructions for generating these first two rows later.\
+\
+Row 3 onwards in the csv file are the daily scores for each player. It is basically a matrix where the rows are indexed by the date and the columns are the date; a sequential number between 1 and 18 which we call a hole; the players score (one column for each player).\
+Here is how to parse the input file to generate those rows in the csv file.\
+Look only for lines in the input file that look like the one below (ignore all other lines in the input file)\
+[03/04/2024, 11:17:40] Lorcan Kavanagh: Wordle 1,019 6/6\
+The date is obviously the first thing in the square bracket. If there is no row already in the csv for that date then create it a new row and write the date in the format YYMMDD. The rows should be sorted in date order. \
+If this is the very first score row (which means it will be row 3 of the csv then the hole value should be 1. If its any other row then the rule for the hole value depends on the hole value of the previous row. If that previous row value is 18 then this  hole value should be 1. Otherwise it should be 1 greater than the previous hole value.\
+After the square bracket is the players name with a colon separator at the end. If a column does not already exist for that player then please create one. Put the players name in row 2 of that column.\
+Towards the end of the line is a sequence of characters with a forward slash and a 6 at the end of it. Take the character before the forward slash as the score. If that score is X then please substitute the X with a 7. \uc0\u8232 At the end of processing of the input file then check the csv file for any score cells with no values in them and then please set them to 8.\
+\
+Can you write a python program to do all the above. Store the program and the script to run it in /Users/joc/Education/WordleWithBob/ and be careful not to overwrite existing files so file names you generate should be unique to this folder.\
+}

@@ -1,0 +1,45 @@
+I need two new buttons on the main Wordle Competitions web page:
+1. Start a new round for a set of competitions.
+2. Show the current round. 
+
+Before you start changing any python files I want you to see if you can achieve this without touching the existing code.
+Please let me know what you think.
+However if the only file you need to change is config.py then that's ok. 
+
+
+1. How Start a new round works...
+When clicked the user should be prompted for a date and told the date format is yyDDMM eg 251205 for Dec 5 2025
+Each round will have a set of competitors associated to it.
+By default the competitors are the same as help in the config file.
+If the user wants to change that they are presented with a list in the form of a text box. 
+The user can add, delete or rename any of the competitors
+The user can also assign each competitor to a team. 
+The default is as held in the main config file.
+But the user can change the competitors and teams at any time.
+The user can also change the date at any time.
+The user can also change the competitions that are associated with the round.
+Each round can have many competitions associated with it. 
+So the user has to select the competitions that are associated to the round from a drop down.
+During the middle of a round, competitions may be added to the round by the user. 
+Any change to the teams, competitors, date or competitions that are associated with the round will be stored in a separate config file (python) that is associated to the round.
+This overrides the main config file.
+The competitions will each start at the start of the round.
+So far the only competitions supported is skins. But we will work together to add more competitions in the future.
+For now the default is prepopulated for the user. The default is skins. 
+There can be many rounds in progress at once so you have to track and calculate them. But to start we will only have 1 round in progress.
+All the context for a round needs to be persisted as a round will last many weeks. 
+For now store it in a human readable format in subfolders.
+The subfolders will be named after the round's start date.
+Each time a user wants to Show the results for a round then the system will be able to get all the context for the round and display it faithfully.
+
+
+
+
+How Show the Current Round works...
+When Clicked the user should be brought to a web page with all the scores for all the competitors for all the holes that have been played far.
+We'll fill this out later
+
+
+
+
+

@@ -1,7 +1,8 @@
 # Configuration file for Wordle Competitions
 
 # Path to the CSV file containing scores
-SPREADSHEET_PATH = "sourceData/Wordler Skins Sandbox - Scores.csv"
+#SPREADSHEET_PATH = "sourceData/Wordler Skins Sandbox - Scores.csv"
+SPREADSHEET_PATH = "sourceData/Wordler Skins Parse Inputs - Scores.csv"
 
 # Player configuration
 # Each player has a name and team assignment

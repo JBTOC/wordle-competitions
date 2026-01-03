@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start New Round - Wordle Competitions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f1e8;
+        }
+        h1 {
+            color: #3d3d3d;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #6b8e7f;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .form-container {
+            background: #e8e4d9;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(61, 61, 61, 0.08);
+        }
+        .form-group {
+            margin-bottom: 25px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #3d3d3d;
+        }
+        .help-text {
+            font-size: 0.9em;
+            color: #5a5a5a;
+            margin-top: 5px;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d4d0c5;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #f4f1e8;
+        }
+        .competitors-list {
+            border: 1px solid #d4d0c5;
+            border-radius: 4px;
+            padding: 15px;
+            background-color: #f4f1e8;
+        }
+        .competitor-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .competitor-row input, .competitor-row select {
+            margin: 0;
+        }
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s;
+        }
+        .btn-primary {
+            background-color: #6b8e7f;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #5a7a6d;
+        }
+        .btn-secondary {
+            background-color: #bfbab0;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #a8a39a;
+        }
+        .btn-danger {
+            background-color: #b87c7c;
+            color: white;
+            padding: 5px 10px;
+            font-size: 14px;
+        }
+        .btn-danger:hover {
+            background-color: #a56b6b;
+        }
+        .btn-add {
+            background-color: #7fa68f;
+            color: white;
+            margin-top: 10px;
+        }
+        .btn-add:hover {
+            background-color: #6d9180;
+        }
+        .competitions-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .alert-error {
+            background-color: #e8d4d4;
+            color: #6b3d3d;
+            border: 1px solid #d4c0c0;
+        }
+        .alert-success {
+            background-color: #d9e8d9;
+            color: #3d5a3d;
+            border: 1px solid #c5d9c5;
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-link">← Back to Home</a>
+    
+    <h1>🎯 Start New Round</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    
+    <div class="form-container">
+        <form method="POST" id="startRoundForm">
+            <!-- Round Date -->
+            <div class="form-group">
+                <label for="round_date">Round Start Date *</label>
+                <input type="text" id="round_date" name="round_date" 
+                       placeholder="251205" required pattern="\d{6}">
+                <div class="help-text">
+                    Format: YYMMDD (e.g., 251205 for December 5, 2025)
+                </div>
+            </div>
+            
+            <!-- Competitors -->
+            <div class="form-group">
+                <label>Competitors *</label>
+                <div class="competitors-list" id="competitorsList">
+                    {% for player in default_competitors %}
+                    <div class="competitor-row">
+                        <input type="text" name="competitor_name[]" 
+                               value="{{ player.name }}" placeholder="Player Name" required>
+                        <select name="competitor_team[]" required>
+                            {% for team in default_teams %}
+                            <option value="{{ team }}" {% if team == player.team %}selected{% endif %}>
+                                {{ team }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" class="btn btn-danger" onclick="removeCompetitor(this)">
+                            Remove
+                        </button>
+                    </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-add" onclick="addCompetitor()">
+                    + Add Competitor
+                </button>
+                <div class="help-text">
+                    Add, remove, or modify competitors and their team assignments
+                </div>
+            </div>
+            
+            <!-- Competitions -->
+            <div class="form-group">
+                <label>Competitions *</label>
+                <div class="competitions-checkboxes">
+                    {% for comp in available_competitions %}
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="comp_{{ comp }}" 
+                               name="competitions[]" value="{{ comp }}" 
+                               {% if comp == 'skins' %}checked{% endif %}>
+                        <label for="comp_{{ comp }}" style="margin: 0; font-weight: normal;">
+                            {{ comp|title }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="help-text">
+                    Select which competitions will be part of this round
+                </div>
+            </div>
+            
+            <!-- Form Actions -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Start Round</button>
+                <a href="/" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        // Get unique teams from current competitors
+        function getAvailableTeams() {
+            const teams = new Set();
+            {% for team in default_teams %}
+            teams.add('{{ team }}');
+            {% endfor %}
+            return Array.from(teams);
+        }
+        
+        function addCompetitor() {
+            const list = document.getElementById('competitorsList');
+            const teams = getAvailableTeams();
+            
+            const row = document.createElement('div');
+            row.className = 'competitor-row';
+            row.innerHTML = `
+                <input type="text" name="competitor_name[]" placeholder="Player Name" required>
+                <select name="competitor_team[]" required>
+                    ${teams.map(team => `<option value="${team}">${team}</option>`).join('')}
+                </select>
+                <button type="button" class="btn btn-danger" onclick="removeCompetitor(this)">
+                    Remove
+                </button>
+            `;
+            list.appendChild(row);
+        }
+        
+        function removeCompetitor(button) {
+            const row = button.parentElement;
+            const list = document.getElementById('competitorsList');
+            
+            // Don't allow removing if only one competitor left
+            if (list.children.length <= 1) {
+                alert('You must have at least one competitor!');
+                return;
+            }
+            
+            row.remove();
+        }
+        
+        // Validate form before submission
+        document.getElementById('startRoundForm').addEventListener('submit', function(e) {
+            const competitors = document.querySelectorAll('input[name="competitor_name[]"]');
+            if (competitors.length === 0) {
+                e.preventDefault();
+                alert('You must have at least one competitor!');
+                return;
+            }
+            
+            const competitions = document.querySelectorAll('input[name="competitions[]"]:checked');
+            if (competitions.length === 0) {
+                e.preventDefault();
+                alert('You must select at least one competition!');
+                return;
+            }
+        });
+    </script>
+</body>
+</html>

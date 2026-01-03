@@ -45,3 +45,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Sensitive feedback files
+employee_feedback_2025.md
+employee_feedback_2025.txt
+senior_engineer_feedback_2025.txt

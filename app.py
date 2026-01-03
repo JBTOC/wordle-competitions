@@ -10,6 +10,11 @@ from collections import defaultdict
 import config
 
 app = Flask(__name__)
+app.secret_key = 'wordle-competitions-secret-key-change-in-production'
+
+# Import and register the rounds blueprint
+from round_routes import rounds_bp
+app.register_blueprint(rounds_bp)
 
 
 def parse_date(date_str):
@@ -150,6 +155,7 @@ if __name__ == '__main__':
     
     # Start the web server
     # host='0.0.0.0' allows access from any network interface
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Using port 8080 instead of 5000
+    app.run(debug=True, host='0.0.0.0', port=8080)
 
 # Made with Bob
